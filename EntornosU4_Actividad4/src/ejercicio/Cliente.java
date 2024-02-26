@@ -6,6 +6,7 @@ public class Cliente {
 	private int id;
 	private int pasword;
 	double monedero;
+	private ArrayList<inversion> inversiones = new ArrayList<>();
 
 	public Cliente(int id, int pasword) {
 		this.id = id;
@@ -13,6 +14,19 @@ public class Cliente {
 		this.monedero = randomMetod();
 	}
 
+	/**
+	 * @return el inversiones
+	 */
+	public ArrayList<inversion> getInversiones() {
+		return inversiones;
+	}
+
+	/**
+	 * @param inversiones el inversiones a establecer
+	 */
+	public void setInversiones(ArrayList<inversion> inversiones) {
+		this.inversiones = inversiones;
+	}
 
 	public int getPasword() {
 		return pasword;
@@ -29,31 +43,32 @@ public class Cliente {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public double getSaldo() {
 		// TODO Auto-generated method stub
 		return monedero;
 	}
-	
+
 	public void setSaldo(double monedero) {
 		this.monedero = monedero;
 	}
-	
+
 	public double dropSaldo(double monedero) {
-		return this.monedero = this.monedero-monedero;
+		return this.monedero = this.monedero - monedero;
 	}
-	
-	
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Cliente cliente = (Cliente) obj;
-        return id == cliente.id && pasword == cliente.pasword;
-    }
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Cliente cliente = (Cliente) obj;
+		return id == cliente.id && pasword == cliente.pasword;
+	}
+
 	public double randomMetod() {
 		Random random = new Random();
-		return random.nextDouble(19000)+1000;
+		return random.nextDouble(19000) + 1000;
 	}
 }
