@@ -1,5 +1,5 @@
 package ejercicio;
-
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Cliente {
@@ -7,11 +7,14 @@ public class Cliente {
 	private int pasword;
 	double monedero;
 	private ArrayList<inversion> inversiones = new ArrayList<>();
+	private ArrayList<String> recibos; // Array de recibos
 
 	public Cliente(int id, int pasword) {
 		this.id = id;
 		this.pasword = pasword;
 		this.monedero = randomMetod();
+		this.recibos = new ArrayList<>();
+		
 	}
 
 	/**
@@ -71,4 +74,14 @@ public class Cliente {
 		Random random = new Random();
 		return random.nextDouble(19000) + 1000;
 	}
+	
+	 // Método para agregar un recibo al cliente
+    public void agregarRecibo(String recibo) {
+        recibos.add(recibo);
+    }
+    
+    // Método para eliminar un recibo del cliente
+    public void eliminarRecibo(String recibo) {
+        recibos.remove(recibo);
+    }
 }

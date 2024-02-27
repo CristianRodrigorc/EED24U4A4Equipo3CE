@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class cajeroMain {
 	static Scanner sc = new Scanner(System.in);
+
 	public static void main(String[] args) {
 		int userTemp = 0;
 		int positionTemp = 0;
@@ -20,16 +21,13 @@ public class cajeroMain {
 		users.add(new Cliente(4, 444));
 		users.add(new Cliente(5, 555));
 
-		
-		
 		System.out.println("*******Bienvenido*******");
 		viewUsers(users);
 		System.out.println();
 		System.out.println();
 
 		comProbar(userTemp, positionTemp, passTemp, users, temp, menu);
-		
-		
+
 	}
 
 	public static void viewUsers(ArrayList<Cliente> list) {
@@ -38,26 +36,26 @@ public class cajeroMain {
 			System.out.println("ID: " + cliente.getId());
 		}
 	}
-	
-	public static void comProbar(Integer userTemp, int positionTemp, int passTemp, ArrayList <Cliente> users, boolean temp, char menu) {
+
+	public static void comProbar(Integer userTemp, int positionTemp, int passTemp, ArrayList<Cliente> users,
+			boolean temp, char menu) {
 		do {
 			System.out.println("Ingrese el Usuario: ");
 			userTemp = sc.nextInt();
-			positionTemp = userTemp-1;
+			positionTemp = userTemp - 1;
 
 			System.out.println("Ingrese la Contraseña: ");
 			passTemp = sc.nextInt();
 			sc.nextLine();
-			
+
 			Cliente findUser = new Cliente(userTemp, passTemp);
 			if (checkUser(users, findUser)) {
 				menuCajero(menu, users, positionTemp);
-				
+
 			}
 		} while (!temp);
 	}
 
-	
 	public static boolean checkUser(ArrayList<Cliente> users, Cliente findUsers) {
 		boolean condition2 = false;
 		for (Cliente cliente : users) {
@@ -74,8 +72,8 @@ public class cajeroMain {
 			return true;
 		}
 	}
-	
-	public static void menuCajero (char menu, ArrayList<Cliente> users, int positionTemp){
+
+	public static void menuCajero(char menu, ArrayList<Cliente> users, int positionTemp) {
 		System.out.println("\n");
 		do {
 			System.out.println("Indique la Operación a realizar...");
@@ -83,83 +81,122 @@ public class cajeroMain {
 			System.out.println("B. Ingresar importe");
 			System.out.println("C. Retirar importe");
 			System.out.println("D. Transferir importe");
+			System.out.println("E. Añadir recibo"); // Nueva opción
+			System.out.println("F. Eliminar recibo"); // Nueva opción
+			System.out.println("G. Comprobar Inversiones"); // Nueva opción
 			System.out.println("S. Salir");
 			String temp = sc.nextLine().toUpperCase();
-			if(!temp.isEmpty()){
+			if (!temp.isEmpty()) {
 				menu = temp.charAt(0);
 				switch (menu) {
 				case 'A':
 					viewSaldo(users, positionTemp);
 					break;
-					
+
 				case 'B':
 					System.out.println("Ingresar la cantidad a depositar");
 					double deposito = sc.nextDouble();
 					depositSaldo(users, positionTemp, deposito);
 					break;
-					
+
 				case 'C':
 					System.out.println("Ingresar la cantidad a depositar");
 					double retiro = sc.nextDouble();
 					retireSaldo(users, positionTemp, retiro);
 					break;
-					
+
 				case 'D':
 					System.out.println("Indique la cuenta destinataria");
 					for (Cliente cliente : users) {
-						if(cliente == users.get(positionTemp)) {
+						if (cliente == users.get(positionTemp)) {
 							continue;
-						}else {
+						} else {
 							System.out.println("ID: " + cliente.getId());
 						}
 					}
 					int idDestinatario = sc.nextInt();
-					
+
 					System.out.println("Indique el monto de la transferencia");
 					double montoTransferencia = sc.nextDouble();
 					break;
-					
+
+				case 'E': // Nueva opción
+					System.out.println("Ingrese el recibo: ");
+					String recibo = sc.nextLine();
+					agregarRecibo(users, positionTemp, recibo);
+					break;
+
+				case 'F': // Nueva opción
+					System.out.println("Ingrese el recibo a eliminar: ");
+					String reciboAEliminar = sc.nextLine();
+					eliminarRecibo(users, positionTemp, reciboAEliminar);
+					break;
+				
+                case 'G': // Nueva opción
+                    comprobarInversiones(users, positionTemp);
+                    break;
+
 				case 'S':
 					System.out.println("Saliendo del Menu...");
 					System.out.println("Volviendo al Menú principal");
 					break;
-					
+
 				default:
 					System.out.println("Opción inválida, vuelva a introducir una opción");
 				}
-			}else {
-	            System.out.println("Debe ingresar una opción.");
-	        }
+			} else {
+				System.out.println("Debe ingresar una opción.");
+			}
 		} while (menu != 'S');
 	}
-	
+
 	public static void viewSaldo(ArrayList<Cliente> users, int positionTemp) {
-	    Cliente cliente = users.get(positionTemp);
-	    double saldo = cliente.getSaldo(); // Utilizar el método getSaldo() en el objeto cliente
-	    System.out.println("Saldo actual del cliente " + (positionTemp+1) + ": " + saldo);
-	}
-	
-	public static void depositSaldo (ArrayList<Cliente> users, int positionTemp, double deposito) {
 		Cliente cliente = users.get(positionTemp);
-		double saldo = cliente.getSaldo()+deposito;
+		double saldo = cliente.getSaldo(); // Utilizar el método getSaldo() en el objeto cliente
+		System.out.println("Saldo actual del cliente " + (positionTemp + 1) + ": " + saldo);
+	}
+
+	public static void depositSaldo(ArrayList<Cliente> users, int positionTemp, double deposito) {
+		Cliente cliente = users.get(positionTemp);
+		double saldo = cliente.getSaldo() + deposito;
 		cliente.setSaldo(saldo);
 		System.out.println("Depósito realizado");
-		System.out.println("Saldo actual del cliente "+saldo);
+		System.out.println("Saldo actual del cliente " + saldo);
 	}
-	
-	public static void retireSaldo (ArrayList<Cliente> users, int positionTemp, double retiro) {
+
+	public static void retireSaldo(ArrayList<Cliente> users, int positionTemp, double retiro) {
 		Cliente cliente = users.get(positionTemp);
-		double saldo = cliente.getSaldo()-retiro;
+		double saldo = cliente.getSaldo() - retiro;
 		cliente.setSaldo(saldo);
 		System.out.println("Retiro realizado");
-		System.out.println("Saldo actual del cliente "+saldo);
+		System.out.println("Saldo actual del cliente " + saldo);
 	}
-	
-	public static void transferSaldo (ArrayList<Cliente> users, int positionTemp,int idDestinatario, double montoTransferencia) {
+
+	public static void transferSaldo(ArrayList<Cliente> users, int positionTemp, int idDestinatario,
+			double montoTransferencia) {
 		Cliente cliente = users.get(positionTemp);
 		Cliente cliente2 = users.get(idDestinatario);
-		double saldoCliente = cliente.getSaldo()-montoTransferencia;
-		double saldoCliente2 = cliente.getSaldo()+montoTransferencia;
-		System.out.println("Saldo actual del cliente "+saldoCliente);
+		double saldoCliente = cliente.getSaldo() - montoTransferencia;
+		double saldoCliente2 = cliente.getSaldo() + montoTransferencia;
+		System.out.println("Saldo actual del cliente " + saldoCliente);
 	}
+	
+    // Método para comprobar las inversiones del usuario
+    public static void comprobarInversiones(ArrayList<Cliente> users, int positionTemp) {
+        Cliente cliente = users.get(positionTemp);
+        ArrayList<Inversion> inversiones = cliente.getInversiones();
+
+        System.out.println("Comprobando inversiones...");
+        for (Inversion inversion : inversiones) {
+            double cantidadAntes = inversion.cantidad;
+            double beneficios = inversion.obtenerBeneficios();
+            double cantidadDespues = inversion.cantidad;
+            System.out.println("Nombre de la inversión: " + inversion.nombre);
+            System.out.println("Coeficiente de inversión: " + (cantidadDespues - cantidadAntes));
+            System.out.println("Cantidad anterior: " + cantidadAntes);
+            System.out.println("Cantidad después: " + cantidadDespues);
+            System.out.println();
+        }
+    }
+	
 }
